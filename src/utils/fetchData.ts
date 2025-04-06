@@ -24,23 +24,23 @@ export async function getCharacterDetails(ids: number[]): Promise<CharacterPrope
     const characters = await Promise.all(
       ids.map(async (id) => {
         const res = await fetch(`https://swapi.dev/api/people/${id}/`);
-        const person = await res.json();
+        const character = await res.json();
 
         const vehicleNames = await Promise.all(
-          person.vehicles.map((url: string) =>
+          character.vehicles.map((url: string) =>
             fetch(url).then(res => res.json()).then(v => v.name)
           )
         );
 
         const speciesNames = await Promise.all(
-          person.species.map((url: string) =>
+          character.species.map((url: string) =>
             fetch(url).then(res => res.json()).then(s => s.name)
           )
         );
 
         return {
-          name: person.name,
-          gender: person.gender,
+          name: character.name,
+          gender: character.gender,
           vehicles: vehicleNames,
           species: speciesNames
         };
@@ -54,9 +54,16 @@ export async function getCharacterDetails(ids: number[]): Promise<CharacterPrope
   }
 }
 
-export async function fetchCharacters(ids: number[] = []): Promise<CharacterProperties[]> {
+export async function fetchCharacters(page: number = 1): Promise<CharacterProperties[]> {
   try {
-    const characterIds = ids.length > 0 ? ids : Array.from({ length: 10 }, (_, i) => i + 1); // Use provided IDs or default to 1-10
+    const res = await fetch(`https://swapi.dev/api/people/?page=${page}`);
+    const data = await res.json();
+
+    const characterIds = data.results.map((result: { url: string }) => {
+      const urlParts = result.url.split('/').filter(Boolean);
+      return parseInt(urlParts[urlParts.length - 1], 10); // Extract ID from URL
+    });
+
     return await getCharacterDetails(characterIds);
   } catch (error) {
     console.error("Error fetching characters:", error);

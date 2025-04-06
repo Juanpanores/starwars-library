@@ -3,7 +3,7 @@ import { fetchCharacters, searchCharacters as searchCharactersUtil, fetchVehicle
 
 export function useCharacters() {
   const characters = ref<CharacterProperties[]>([]);
-  const allCharacters = ref<CharacterProperties[]>([]);
+  const page = ref<number>(1);
   const skeletonLoading = ref(true);
   const loading = ref(false);
   const vehicles = ref<string[]>([]);
@@ -16,9 +16,8 @@ export function useCharacters() {
   async function loadCharacters() {
     skeletonLoading.value = true;
     try {
-      const newCharacters = await fetchCharacters();
-      allCharacters.value = newCharacters;
-      characters.value = allCharacters.value.slice(0, 10);
+      const newCharacters = await fetchCharacters(page.value);
+      characters.value = newCharacters.slice(0, 10);
     } finally {
       skeletonLoading.value = false;
     }
@@ -26,7 +25,7 @@ export function useCharacters() {
 
   async function searchCharacters(query: string) {
     if (query.trim() === '') {
-      allCharacters.value = [];
+      page.value = 1;
       characters.value = [];
       loadCharacters();
       return;
@@ -35,8 +34,7 @@ export function useCharacters() {
     skeletonLoading.value = true;
     try {
       const filteredCharacters = await searchCharactersUtil(query.trim());
-      allCharacters.value = filteredCharacters;
-      characters.value = allCharacters.value.slice(0, 10);
+      characters.value = filteredCharacters.slice(0, 10);
     } finally {
       skeletonLoading.value = false;
     }
@@ -81,11 +79,10 @@ export function useCharacters() {
 
   async function fetchMore() {
     loading.value = true;
+    page.value += 1;
     try {
-      const newCharacters = await fetchCharacters();
-      allCharacters.value = [...allCharacters.value, ...newCharacters];
-      const currentLength = characters.value.length;
-      characters.value = allCharacters.value.slice(0, currentLength + 10);
+      const newCharacters = await fetchCharacters(page.value);
+      characters.value = [...characters.value, ...newCharacters.slice(0, 10)];
     } finally {
       loading.value = false;
     }
@@ -109,7 +106,6 @@ export function useCharacters() {
 
   return {
     characters,
-    allCharacters,
     skeletonLoading,
     loading,
     vehicles,

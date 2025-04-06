@@ -6,11 +6,13 @@
         <th class="header">Género</th>
         <th class="header">Vehiculo</th>
         <th class="header">Especie</th>
+        <th class="header">Favorito</th>
       </tr>
     </thead>
     <tbody>
       <template v-if="skeletonLoading && characters.length === 0">
         <tr v-for="n in 10" :key="n">
+          <td class="skeleton"></td>
           <td class="skeleton"></td>
           <td class="skeleton"></td>
           <td class="skeleton"></td>
@@ -23,6 +25,14 @@
           <td class="table_value">{{ character.gender === "n/a" ? '-' : character.gender }}</td>
           <td class="table_value">{{ character.vehicles.length > 0 ? character.vehicles.join(', ') : '-' }}</td>
           <td class="table_value">{{ character.species.length > 0 ? character.species.join(', ') : '-' }}</td>
+          <td class="table_value">
+            <button
+              @click="$emit('toggleFavorite', character)"
+              :class="{ favorited: favorites.some(fav => fav.name === character.name) }"
+            >
+              ★
+            </button>
+          </td>
         </tr>
       </template>
     </tbody>
@@ -30,13 +40,16 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 import type { CharacterProperties } from '@/utils/fetchData';
+
+defineEmits(['toggleFavorite']);
 
 defineProps<{
   characters: CharacterProperties[];
   skeletonLoading: boolean;
   loading: boolean;
+  favorites: CharacterProperties[];
 }>();
 </script>
 
@@ -64,7 +77,6 @@ table.loading-table {
 }
 
 th, td {
-  padding: 0.25rem;
   border: 1px solid #ddd;
 }
 
@@ -95,5 +107,17 @@ tr:nth-child(even) {
   100% {
     background-color: #e0e0e0;
   }
+}
+
+button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #ccc;
+}
+
+button.favorited {
+  color: gold;
 }
 </style>

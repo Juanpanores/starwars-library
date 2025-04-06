@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import CharacterTable from './components/CharacterTable.vue';
 </script>
 
 <template>
-    <CharacterTable/>
-
+    <router-view />
 </template>
 
 <style scoped>
