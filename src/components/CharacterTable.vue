@@ -1,120 +1,109 @@
 <template>
   <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th class ="header">Nombre</th>
-          <th class ="header">Género</th>
-          <th class ="header">Vehiculo</th>
-          <th class ="header">Especie</th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-if="loading">
-          <tr v-for="n in 10" :key="n">
-            <td class="skeleton"></td>
-            <td class="skeleton"></td>
-            <td class="skeleton"></td>
-            <td class="skeleton"></td>
-          </tr>
-        </template>
-        <template v-else>
-          <tr v-for="character in characters" :key="character.name">
-            <td class = "table_value">{{ character.name }}</td>
-            <td class = "table_value">{{ character.gender }}</td>
-            <td class = "table_value">{{ character.vehicles.join(', ') || 'N/A' }}</td>
-            <td class = "table_value">{{ character.species.join(', ') || 'N/A' }}</td>
-          </tr>
-        </template>
-      </tbody>
-    </table>
+    <h1 class="title">Star Wars Wiki</h1>
+    <input
+      type="text"
+      v-model="searchQuery"
+      @input="onSearchInput"
+      placeholder="Buscar personaje..."
+      class="search-input"
+    />
+    <CharacterTableContent
+      :characters="characters"
+      :loading="loading"
+      :isFetchingMore="isFetchingMore"
+    />
+    <div class="fetch-more">
+      <button @click="fetchMore" :disabled="loading || isFetchingMore">
+        {{ loading || isFetchingMore ? 'Cargando...' : 'Cargar más' }}
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { getCharactersWithDetails, type CharacterProperties } from '@/utils/fetchData';
+import { useCharacters } from '@/composables/useCharacters';
+import CharacterTableContent from './CharacterTableContent.vue';
 
-const characters = ref<CharacterProperties[]>([]);
-const loading = ref(true);
+const {
+  characters,
+  loading,
+  isFetchingMore,
+  loadCharacters,
+  searchCharacters,
+  fetchMore,
+} = useCharacters();
 
-async function loadCharacters() {
-  try {
-    characters.value = await getCharactersWithDetails(); // Fetch the first 10 characters
-  } finally {
-    loading.value = false;
-  }
+const searchQuery = ref('');
+let searchTimeout: number | undefined;
+
+function onSearchInput(event: Event) {
+  const value = (event.target as HTMLInputElement).value;
+  if (searchTimeout) clearTimeout(searchTimeout);
+
+  searchTimeout = window.setTimeout(() => {
+    searchCharacters(value);
+  }, 300);
 }
+
 loadCharacters();
 </script>
 
 <style scoped>
-.table-container {
+.table-container {  
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 10%;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 2rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: yellow;
+  font-family: 'Star Jedi', sans-serif;
+  text-shadow: 2px 2px 4px gray;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.search-input {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+table {
+  border-radius: 1rem;
+  overflow: hidden; 
+}
+
+.fetch-more {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 1rem;
-  width: 100%
+  margin-top: 1rem;
 }
 
-.header{
-  color: black
-}
-
-.table_value{
-  color: black
-}
-
-table {
-  width: 100%;
-  max-width: 800px;
-  border-collapse: collapse;
-  text-align: left;
-  background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-th, td {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-}
-
-th {
-  background-color: #f4f4f4;
-  font-weight: bold;
-}
-
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.skeleton {
-  background-color: #e0e0e0;
-  height: 1rem;
+.fetch-more button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #007bff;
+  color: white;
   border-radius: 4px;
-  animation: pulse 1.5s infinite;
+  cursor: pointer;
 }
 
-@keyframes pulse {
-  0% {
-    background-color: #e0e0e0;
-  }
-  50% {
-    background-color: #f0f0f0;
-  }
-  100% {
-    background-color: #e0e0e0;
-  }
+.fetch-more button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
-  table {
-    font-size: 0.9rem;
-  }
 
-  th, td {
-    padding: 0.5rem;
-  }
-}
 </style>
