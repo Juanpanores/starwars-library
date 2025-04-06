@@ -1,5 +1,5 @@
 <template>
-  <table :class="{ 'loading-table': isFetchingMore }">
+  <table :class="{ 'loading-table': loading }">
     <thead>
       <tr>
         <th class="header">Nombre</th>
@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <template v-if="loading && characters.length === 0">
+      <template v-if="skeletonLoading && characters.length === 0">
         <tr v-for="n in 10" :key="n">
           <td class="skeleton"></td>
           <td class="skeleton"></td>
@@ -35,8 +35,8 @@ import type { CharacterProperties } from '@/utils/fetchData';
 
 defineProps<{
   characters: CharacterProperties[];
+  skeletonLoading: boolean;
   loading: boolean;
-  isFetchingMore: boolean;
 }>();
 </script>
 
