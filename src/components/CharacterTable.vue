@@ -1,5 +1,8 @@
 <template>
   <div class="table-container">
+    <div class="favorites-button">
+      <button @click="goToFavorites">Ver Favoritos</button>
+    </div>
     <h1 class="title">Star Wars Wiki</h1>
     <div class="search-container">
       <div class="search-input-container">
@@ -13,24 +16,18 @@
         />
       </div>
       <div class="dopdown-filter-container">
-        <div class="dropdown-filter">
-          <p>Vehiculo</p>
-          <select v-model="selectedVehicle" @change="onVehicleChange" class="dropdown">
-            <option value="">Todos</option>
-            <option v-for="vehicle in vehicles" :key="vehicle" :value="vehicle">
-              {{ vehicle }}
-            </option>
-          </select>
-        </div>
-        <div class="dropdown-filter">
-          <p>Especie</p>
-          <select v-model="selectedSpecies" @change="onSpeciesChange" class="dropdown">
-            <option value="">Todos</option>
-            <option v-for="species in species" :key="species" :value="species">
-              {{ species }}
-            </option>
-          </select>
-        </div>
+        <DropdownFilter
+          title="Vehiculo"
+          :items="vehicles"
+          v-model="selectedVehicle"
+          @change="onVehicleChange"
+        />
+        <DropdownFilter
+          title="Especie"
+          :items="species"
+          v-model="selectedSpecies"
+          @change="onSpeciesChange"
+        />
       </div>
     </div>
     <div v-if="characters.length === 0 && !skeletonLoading" class="no-results">
@@ -41,6 +38,8 @@
       :characters="characters"
       :skeletonLoading="skeletonLoading"
       :loading="loading"
+      :favorites="favoriteCharacters"
+      @toggleFavorite="toggleFavorite"
     />
     <div class="fetch-more">
       <button @click="fetchMore" :disabled="skeletonLoading || loading">
@@ -52,7 +51,10 @@
 
 <script setup lang="ts">
 import { useCharacters } from '@/composables/useCharacters';
+import { useFavorite } from '@/composables/useFavorite';
 import CharacterTableContent from './CharacterTableContent.vue';
+import DropdownFilter from './DropdownFilter.vue';
+import { useRouter } from 'vue-router';
 
 const {
   characters,
@@ -68,6 +70,14 @@ const {
   onSpeciesChange,
   fetchMore,
 } = useCharacters();
+
+const { favoriteCharacters, toggleFavorite } = useFavorite();
+
+const router = useRouter();
+
+const goToFavorites = () => {
+  router.push('/favorites');
+};
 </script>
 
 <style scoped>
@@ -80,6 +90,7 @@ const {
     padding: 1rem 10%;
     background-color: rgba(0, 0, 0, 0.9);
     border-radius: 2rem;
+    position: relative;
   }
 
   .title {
@@ -110,27 +121,12 @@ const {
     gap: 1rem;
   }
 
-  .dropdown-filter {
-    width: 50%;
-  }
-
   .search-input {
     flex: 2;
     padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1rem;
-  }
-
-  .dropdown {
-    flex: 1;
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    background-color: white;
-    min-width: 250px;
   }
 
   .no-results {
@@ -165,6 +161,25 @@ const {
   .fetch-more button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+  }
+
+  .favorites-button {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+  }
+
+  .favorites-button button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .favorites-button button:hover {
+    background-color: #218838;
   }
 
   @media (max-width: 1024px) {
