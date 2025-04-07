@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown-filter">
     <p>{{ title }}</p>
-    <select v-model="localValue" @change="handleChange" class="dropdown">
+    <select v-model="localValue" @change="handleChange" class="dropdown" :disabled="disabled">
       <option value="">Todos</option>
       <option v-for="item in items" :key="item" :value="item">
         {{ item }}
@@ -17,6 +17,10 @@ const props = defineProps({
   title: String,
   items: Array as () => string[],
   modelValue: String,
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['update:modelValue', 'change']);

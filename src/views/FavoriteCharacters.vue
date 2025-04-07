@@ -19,8 +19,8 @@
 </template>
 
 <script setup lang="ts">
-import CharacterTableContent from '../components/CharacterTableContent.vue';
-import { useFavorite } from '../composables/useFavorite';
+import CharacterTableContent from '../components/tableContent.vue';
+import { useFavorite } from '../composables/useHandleFavorite';
 import { useRouter } from 'vue-router';
 
 const { favoriteCharacters, toggleFavorite } = useFavorite();
