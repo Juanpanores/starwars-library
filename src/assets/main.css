@@ -15,7 +15,19 @@
   }
 
   #app {
-    display: grid;
-    padding: 0 2rem;
+    padding: 1rem 2rem;
   }
+}
+
+@media (max-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    width: 100%;
+    padding: 1rem;
+  }
+  
 }

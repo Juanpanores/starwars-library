@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import CharacterTable from '../components/CharacterTable.vue'
+import TableContainer from '../components/tableContainer.vue'
 </script>
 
 <template>
   <main>
-    <CharacterTable />
+    <TableContainer title="Star Wars Wiki" />
   </main>
 </template>
