@@ -61,10 +61,7 @@
 body {
   min-height: 100vh;
   color: var(--color-text);
-  background-color: black;
-  background-image: none;
-  position: relative;
-  overflow: hidden;
+  background: gray;
   transition:
     color 0.5s,
     background-color 0.5s;
@@ -86,25 +83,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  z-index: 1;
-}
-
-body::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
   background-image: url('https://cdn.mos.cms.futurecdn.net/8vM5KTsVVLgCCxFwWwYLfG.jpg');
   background-size: cover;
   background-position: center;
-  opacity: 0;
-  animation: fadeIn 4s forwards;
-  z-index: 0;
-  background-blend-mode: normal;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
 }
