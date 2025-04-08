@@ -99,7 +99,6 @@ defineProps({
   background-color: rgba(0, 0, 0, 0.9);
   border-radius: 2rem;
   position: relative;
-  z-index: 1;
 }
 
 .header-wrapper {
