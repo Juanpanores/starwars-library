@@ -25,22 +25,6 @@ This project uses `vue-tsc` instead of the regular `tsc` CLI to provide proper t
 
 ---
 
-## 🗂️ Project Structure 
-
-starwars-library/
-├── public/               # Public assets
-├── src/
-│   ├── assets/           # Images, fonts, styles
-│   ├── components/       # Reusable Vue components
-│   ├── views/            # View pages
-│   ├── App.vue           # Root component
-│   └── main.ts           # Entry point
-├── tests/                # Unit tests
-├── vite.config.ts        # Vite configuration
-└── README.md             # Project documentation
-
----
-
 ## 🔧 Customize Configuration
 For more configuration options, check out the Vite documentation.
 
