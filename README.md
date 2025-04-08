@@ -1,39 +1,49 @@
-# starwars_library
+![image](https://github.com/user-attachments/assets/87a5d856-09f9-42b7-893d-98fc92292d6d)
 
-This template should help get you started developing with Vue 3 in Vite.
+[Live link](https://starwars-library-six.vercel.app)
 
-## Recommended IDE Setup
+# ⭐ Star Wars Library
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Welcome to the **Star Wars Library**! This project is a Vue 3 + Vite application inspired by the Star Wars universe.
 
-## Type Support for `.vue` Imports in TS
+---
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## 🚀 Features
 
-## Customize configuration
+- Vue 3 Composition API
+- Vite for fast development
+- Integration with [SWAPI](https://swapi.dev/)
+- Dynamic data rendering
+- TypeScript support
+- Modular file structure
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+---
 
-## Project Setup
+## ✅ Type Support for `.vue` Imports in TypeScript
 
-```sh
-npm install
-```
+This project uses `vue-tsc` instead of the regular `tsc` CLI to provide proper type checking for `.vue` files. Make sure your editor uses Volar for the best experience.
 
-### Compile and Hot-Reload for Development
+---
 
-```sh
-npm run dev
-```
+## 🗂️ Project Structure 
 
-### Type-Check, Compile and Minify for Production
+starwars-library/
+├── public/               # Public assets
+├── src/
+│   ├── assets/           # Images, fonts, styles
+│   ├── components/       # Reusable Vue components
+│   ├── views/            # View pages
+│   ├── App.vue           # Root component
+│   └── main.ts           # Entry point
+├── tests/                # Unit tests
+├── vite.config.ts        # Vite configuration
+└── README.md             # Project documentation
 
-```sh
-npm run build
-```
+---
 
-### Lint with [ESLint](https://eslint.org/)
+## 🔧 Customize Configuration
+For more configuration options, check out the Vite documentation.
 
-```sh
-npm run lint
-```
+---
+
+Created by Juanpanores. May the force be with you!
